@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+
+    <!-- Boostrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+<body>
+
+    <!-- Main Div -->
+    <div class="main bg-dark pt-5" style="height: 100vh; width: 100vw;">
+        
+        <div class="tablediv h-50 w-75 bg-white card shadow mx-auto">
+            <table class="table table-striped text-center">
+                <tr class="table-primary">
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Fav color</th>
+                    <th>Action</th>
+                </tr>
+
+                <!-- mahalaga ang data attrib sa goal mo sa django pwede mo lagyan ng value yan gamit ng {{ cuchu.name }} kumbaga galing sa context -->
+                <tr data-fname="John Doe" data-age="23" data-fcolor="Red">
+                    <td>John Doe</td>
+                    <td>23</td>
+                    <td>Red</td>
+                    <td><a href="#" class="btn btn-primary">Open</a></td>
+                </tr>
+                <tr data-fname="Jane Doe" data-age="19" data-fcolor="Blue">
+                    <td>Jane Doe</td>
+                    <td>19</td>
+                    <td>Blue</td>
+                    <td><a href="#" class="btn btn-primary">Open</a></td>
+                </tr>
+                <tr data-fname="Claire Omen" data-age="32" data-fcolor="Black">
+                    <td>Claire Omen</td>
+                    <td>32</td>
+                    <td>Black</td>
+                    <td><a href="#" class="btn btn-primary">Open</a></td>
+                </tr>
+            </table>
+
+            <!-- IF nasa django na ito ang sample code nyan if kunyare may person tayo na class sa models
+              
+              {% for person in persons %}
+              
+            <tr data-fname="{{ person.name }}" data-age="{{ person.age }}" data-fcolor="{{ person.color }}">
+              <td>{{ person.name }}</td>
+              <td>{{ person.age }}</td>
+              <td>{{ person.color }}</td>
+              <td><a href="#" class="btn btn-primary">Open</a></td>
+            </tr>
+             
+              {% endfor %}
+          
+            -->
+
+            <!-- Hidden button for modal hindi directly napipindot pero kiniclick through jquery -->
+            <button type="button" class="btn d-none" id="modalHiddenTrigger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              Launch demo modal
+            </button>
+        </div>
+    </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Update Modal</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <!-- form -->
+          <form class="d-flex flex-column justify-content-center">
+
+            <!-- Make Sure na may id ang fields mahalga to kasi icacall ang fields via jquery, sa django naman may auto/provided id naman don sa fields e.g( id_age ) if age ang name ng field sa models -->
+            <input type="text" class="form-control shadow-sm mb-3" name="fullname" id="fname">
+            <input type="text" class="form-control shadow-sm mb-3" name="age" id="age">
+            <input type="text" class="form-control shadow-sm mb-3" name="fcolor" id="fcolor">
+            <buttonn class="btn btn-rounded btn-success">Update</button>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+    <!-- BS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script>
+        $(document).ready(function () {
+
+           // Button Delegation to inshort when the anchor tag of td is clicked then eexecute nya ung function sa loob
+            $('.tablediv table tr td').on('click', 'a', function () {
+                
+              // dito na ung mejo tricky part ung data attribute na ginawa mo sa taas ay i lalagay mo sa function
+                var fname = $(this).parents('tr').attr('data-fname');
+                var age = $(this).parents('tr').attr('data-age');
+                var fcolor = $(this).parents('tr').attr('data-fcolor');
+
+                //  dito na sineset ung bagong values ng fields then ineequals sa value ng dtaa attrib na nang galing sa db through context
+                $('#fname').val(fname);
+                $('#age').val(age);
+                $('#fcolor').val(fcolor);
+
+                // lastly opening the modal using js,  why? kasi naka hidden yon at hindi ma cliclick physically
+                $('#modalHiddenTrigger').click();
+
+            });
+        });
+    </script>
+</body>
+</html>
